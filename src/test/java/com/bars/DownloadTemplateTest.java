@@ -21,7 +21,7 @@ public class DownloadTemplateTest { private static WebDriver driver;
         driver = new InternetExplorerDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get("http://10.10.17.22:8080/barsroot/account/login/");
+        driver.get("http://10.10.17.22:8080/barsroot/");
     }
     public void userDelay(int time) {
         try {Thread.sleep(time);
