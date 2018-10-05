@@ -21,7 +21,7 @@ public class DownloadTemplateTest { private static WebDriver driver;
         driver = new InternetExplorerDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get("http://10.10.17.22:8080/barsroot/");
+        driver.get("http://10.10.17.40:8080/barsroot/account/login/");
     }
     public void userDelay(int time) {
         try {Thread.sleep(time);
@@ -74,7 +74,7 @@ public class DownloadTemplateTest { private static WebDriver driver;
                 .until(ExpectedConditions.visibilityOf(FurtherButton));
         FurtherButton.click();
         userDelay(1000);
-        WebElement ChooseRow = driver.findElement(By.xpath("(//*[@class = 'x-grid-cell-inner x-grid-cell-inner-row-numberer'])[2]"));
+        WebElement ChooseRow = driver.findElement(By.xpath("//*[text()='DPT_STROK_PENS']"));
         (new WebDriverWait(driver, 30))
                 .until(ExpectedConditions.visibilityOf(ChooseRow));
         ChooseRow.click();
@@ -84,8 +84,14 @@ public class DownloadTemplateTest { private static WebDriver driver;
                 .until(ExpectedConditions.visibilityOf(DownloadTemplate));
         DownloadTemplate.click();
 
-
     }
-
-
+    @AfterClass
+    public static void tearDown() {
+        driver.switchTo().defaultContent();
+        WebElement profileButton = driver.findElement(By.id("btnProfile"));
+        profileButton.click();
+        WebElement logoutButton = driver.findElement(By.xpath("//*[@id='userProfile']/div[2]/a[2]"));
+        logoutButton.click();
+        driver.quit();
+    }
 }
