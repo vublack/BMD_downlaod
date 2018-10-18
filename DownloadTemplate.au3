@@ -8,7 +8,7 @@ Sleep(5000)
 	  Sleep(500)
 	  ControlSend($hIE ,"",$hCtrl,"{enter}")        ; Submit whatever control has focus
    EndIf
-   Sleep(5000)
+   Sleep(20000)
 
    Local $hWnd3 = WinGetHandle("DPT_STROK_PENS (защищенный просмотр) - Word")
    If WinExists($hWnd3,"") Then

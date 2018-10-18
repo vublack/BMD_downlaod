@@ -21,14 +21,17 @@ public class DownloadTemplateTest { private static WebDriver driver;
         driver = new InternetExplorerDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get("http://10.10.17.40:8080/barsroot/account/login/");
+        driver.get("http://10.10.17.22:8080/barsroot/account/login/");
+//        driver.get("http://10.10.17.50:8080/barsroot/account/login/");
+//        driver.get("http://10.10.17.40:8080/barsroot/account/login/");
+//        driver.get("http://10.10.17.40:8082/barsroot/account/login/");
+
     }
-    public void userDelay(int time) {
+    private void userDelay(int time) {
         try {Thread.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace(); }
     }
-
     @Test
     public void DownloadTemplate() throws IOException {
         WebElement loginField = driver.findElement(By.id("txtUserName"));
@@ -78,12 +81,11 @@ public class DownloadTemplateTest { private static WebDriver driver;
         (new WebDriverWait(driver, 30))
                 .until(ExpectedConditions.visibilityOf(ChooseRow));
         ChooseRow.click();
-        Process proc = Runtime.getRuntime().exec("d:\\AUTOtest\\DownloadTemplate\\DownloadTemplate.exe");
+        Process proc = Runtime.getRuntime().exec(".\\DownloadTemplate.exe");
         WebElement DownloadTemplate = driver.findElement(By.cssSelector("a[data-qtip='скачати шаблон']"));
         (new WebDriverWait(driver, 30))
                 .until(ExpectedConditions.visibilityOf(DownloadTemplate));
         DownloadTemplate.click();
-
     }
     @AfterClass
     public static void tearDown() {
