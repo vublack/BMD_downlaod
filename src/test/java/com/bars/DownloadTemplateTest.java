@@ -1,30 +1,48 @@
 package com.bars;
 
-import org.junit.AfterClass;
+import com.codeborne.selenide.junit.ScreenShooter;
+import com.codeborne.selenide.junit.TextReport;
+import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
-import org.openqa.selenium.*;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.io.File;
+import org.junit.rules.TestRule;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Selectors.byCssSelector;
+import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class DownloadTemplateTest { private static WebDriver driver;
+    @Rule
+    public ScreenShooter screenShooter = ScreenShooter.failedTests().to("test-results/reports");
+    @Rule
+    public TestRule report = new TextReport().onFailedTest(true).onSucceededTest(false);
 
     @BeforeClass
     public static void setup() {
-        String browser = new File(DownloadTemplateTest.class.getResource("/IEDriverServer.exe").getFile()).getPath();
-        System.setProperty("webdriver.ie.driver", browser);
-        driver = new InternetExplorerDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get("http://10.10.17.22:8080/barsroot/account/login/");
-//        driver.get("http://10.10.17.50:8080/barsroot/account/login/");
-//        driver.get("http://10.10.17.40:8080/barsroot/account/login/");
-//        driver.get("http://10.10.17.40:8082/barsroot/account/login/");
+        timeout = 40000;
+//        baseUrl = "http://10.10.17.22:8080/barsroot/account/login";
+//        baseUrl = "http://10.10.17.24:8080/barsroot/account/login";
+//        baseUrl = "http://10.10.17.50:8080/barsroot/account/login";
+//        baseUrl = "http://10.10.17.40:8080/barsroot/account/login";
+//        baseUrl = "http://10.10.17.40:8082/barsroot/account/login";
+//        baseUrl = "http://10.10.10.198:11111/barsroot/account/login";
+//        browser = "chrome";
+        browser = "ie";
+        startMaximized = true;
+//        System.setProperty("webdriver.ie.driver", ".\\IEDriverServer.exe");
+        InternetExplorerDriverManager.getInstance(DriverManagerType.IEXPLORER).arch32().setup();
+//        ChromeDriverManager.getInstance(DriverManagerType.CHROME).setup();
+        open("/");
 
     }
     private void userDelay(int time) {
@@ -34,66 +52,29 @@ public class DownloadTemplateTest { private static WebDriver driver;
     }
     @Test
     public void DownloadTemplate() throws IOException {
-        WebElement loginField = driver.findElement(By.id("txtUserName"));
-        loginField.clear();
-        loginField.sendKeys("absadm01");
-        WebElement passwordField = driver.findElement(By.id("txtPassword"));
-        passwordField.sendKeys("qwerty");
-        WebElement loginButton = driver.findElement(By.id("btLogIn"));
-        loginButton.click();
-        WebElement ProdovjButton = driver.findElement(By.xpath("//input[@value = 'Продовжити']"));
-        (new WebDriverWait(driver, 60))
-                .until(ExpectedConditions.visibilityOf(ProdovjButton));
-        ProdovjButton.click();
-        driver.switchTo().frame(driver.findElement(By.id("mainFrame")));
-        userDelay(1000);
-        WebElement H1 = driver.findElement(By.xpath(".//*[text()='Оголошення']"));
-        (new WebDriverWait(driver, 60))
-                .until(ExpectedConditions.visibilityOf(H1));
-        driver.switchTo().defaultContent();
-
+        $("#txtUserName").setValue("absadm01");
+        $("#txtPassword").setValue("qwerty").pressEnter();
+//        $("#btLogIn").click();
+        $x("//input[@value = 'Продовжити']").click();
+        switchTo().frame($("#mainFrame"));
+        $(By.tagName("h1")).shouldHave(text("Оголошення"));
+        switchTo().defaultContent();
+        $(".btn_branches").shouldBe(visible).click();
+        $(byXpath("//div[@id='treeview']/ul/li/ul/li/div/span[2]/span")).shouldBe(visible).shouldHave(text("300465")).click();
+        getWebDriver().navigate().refresh();
         //!!!!Адміністрування шаблонів!!!!
-        userDelay(1000);
-        WebElement findOpers = driver.findElement(By.id("findOpersText"));
-        findOpers.clear();
-        findOpers.sendKeys("Адміністрування шаблонів");
-        Actions builder = new Actions(driver);
-        builder.sendKeys(Keys.ENTER).perform();
-        WebElement AdmTempl = driver.findElement(By.xpath("//*[@class='oper-name']/span[text()='Адміністрування шаблонів']"));
-        (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.visibilityOf(AdmTempl));
-        AdmTempl.click();
-        userDelay(1000);
+        $("#findOpersText").setValue("Адміністрування шаблонів").pressEnter();
+        $x("//*[@class='oper-name']/span[text()='Адміністрування шаблонів']").shouldBe(visible).click();
+        switchTo().frame($("#mainFrame"));
+        $x(".//*[text()='Фільтр перед населенням таблиці']").shouldBe(visible);
+        $x("(//*[@class='x-btn-inner x-btn-inner-center'])[text()='Далі']").shouldBe(visible).click();
+        $x("//*[text()='DPT_STROK_PENS']").shouldBe(visible).click();
 
-        //!!!! Перехід на фрейм!!!!
-        driver.switchTo().frame(driver.findElement(By.id("mainFrame")));
-        userDelay(1000);
-        WebElement FilterWindow = driver.findElement(By.xpath(".//*[text()='Фільтр перед населенням таблиці']"));
-        (new WebDriverWait(driver, 100))
-                .until(ExpectedConditions.visibilityOf(FilterWindow));
+        Runtime.getRuntime().exec(".\\DownloadTemplate.exe");
+        $(byCssSelector("a[data-qtip='скачати шаблон']")).shouldBe(visible).click();
+        switchTo().defaultContent();
+        $("#btnProfile").shouldBe(visible).click();
+        $x("//*[@id='userProfile']/div[2]/a[2]").shouldBe(visible).click();
+    }
 
-        WebElement FurtherButton = driver.findElement(By.xpath("(//*[@class='x-btn-inner x-btn-inner-center'])[text()='Далі']"));
-        (new WebDriverWait(driver, 30))
-                .until(ExpectedConditions.visibilityOf(FurtherButton));
-        FurtherButton.click();
-        userDelay(1000);
-        WebElement ChooseRow = driver.findElement(By.xpath("//*[text()='DPT_STROK_PENS']"));
-        (new WebDriverWait(driver, 30))
-                .until(ExpectedConditions.visibilityOf(ChooseRow));
-        ChooseRow.click();
-        Process proc = Runtime.getRuntime().exec(".\\DownloadTemplate.exe");
-        WebElement DownloadTemplate = driver.findElement(By.cssSelector("a[data-qtip='скачати шаблон']"));
-        (new WebDriverWait(driver, 30))
-                .until(ExpectedConditions.visibilityOf(DownloadTemplate));
-        DownloadTemplate.click();
-    }
-    @AfterClass
-    public static void tearDown() {
-        driver.switchTo().defaultContent();
-        WebElement profileButton = driver.findElement(By.id("btnProfile"));
-        profileButton.click();
-        WebElement logoutButton = driver.findElement(By.xpath("//*[@id='userProfile']/div[2]/a[2]"));
-        logoutButton.click();
-        driver.quit();
-    }
 }
