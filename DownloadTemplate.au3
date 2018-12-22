@@ -9,7 +9,7 @@ Sleep(6000)
 	  ControlSend($hIE ,"",$hCtrl,"{TAB}")          ; Gives focus to Save Button
 	  Sleep(1500)
 	  ControlSend($hIE ,"",$hCtrl,"{enter}")        ; Submit whatever control has focus
-	  Sleep(7000)
+	  Sleep(8000)
 	  ControlSend($hIE ,"",$hCtrl,"{F6}")          ; Gives focus to Open Button
 	  Sleep(1500)
 	  ControlSend($hIE ,"",$hCtrl,"{TAB}")          ; Gives focus to Open folder
