@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+
 
 import java.io.IOException;
 
@@ -21,7 +21,8 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
-public class DownloadTemplateTest { private static WebDriver driver;
+public class DownloadTemplateTest {
+
     @Rule
     public ScreenShooter screenShooter = ScreenShooter.failedTests().to("test-results/reports");
     @Rule
@@ -44,11 +45,6 @@ public class DownloadTemplateTest { private static WebDriver driver;
 //        ChromeDriverManager.getInstance(DriverManagerType.CHROME).setup();
         open("/");
 
-    }
-    private void userDelay(int time) {
-        try {Thread.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace(); }
     }
     @Test
     public void DownloadTemplate() throws IOException {

@@ -28,7 +28,7 @@
                 <version>2.22.1</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <selenide.baseUrl>http://10.10.17.50:8080/barsroot/account/login</selenide.baseUrl>
+                        <selenide.baseUrl>http://10.10.17.53:8080/barsroot/account/login</selenide.baseUrl>
                     </systemPropertyVariables>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
                 </configuration>
