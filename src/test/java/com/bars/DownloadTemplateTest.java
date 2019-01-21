@@ -2,8 +2,11 @@ package com.bars;
 
 import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.junit.TextReport;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import io.github.bonigarcia.wdm.DriverManagerType;
 import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,6 +33,7 @@ public class DownloadTemplateTest {
 
     @BeforeClass
     public static void setup() {
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(false));
         timeout = 40000;
 //        baseUrl = "http://10.10.17.22:8080/barsroot/account/login";
 //        baseUrl = "http://10.10.17.24:8080/barsroot/account/login";
@@ -40,6 +44,7 @@ public class DownloadTemplateTest {
 //        browser = "chrome";
         browser = "ie";
         startMaximized = true;
+//        holdBrowserOpen=true;
 //        System.setProperty("webdriver.ie.driver", ".\\IEDriverServer.exe");
         InternetExplorerDriverManager.getInstance(DriverManagerType.IEXPLORER).arch32().setup();
 //        ChromeDriverManager.getInstance(DriverManagerType.CHROME).setup();
@@ -73,4 +78,8 @@ public class DownloadTemplateTest {
         $x("//*[@id='userProfile']/div[2]/a[2]").shouldBe(visible).click();
     }
 
+    @AfterClass
+    public static void tearDown() {
+        SelenideLogger.removeListener("AllureSelenide");
+    }
 }
