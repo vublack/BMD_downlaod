@@ -1,18 +1,17 @@
 package com.bars;
 
-import com.codeborne.selenide.junit.ScreenShooter;
-import com.codeborne.selenide.junit.TextReport;
+
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.testng.ScreenShooter;
+import com.codeborne.selenide.testng.TextReport;
 import io.github.bonigarcia.wdm.DriverManagerType;
 import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
 import org.openqa.selenium.By;
-
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
@@ -24,12 +23,9 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
-public class DownloadTemplateTest {
 
-    @Rule
-    public ScreenShooter screenShooter = ScreenShooter.failedTests().to("test-results/reports");
-    @Rule
-    public TestRule report = new TextReport().onFailedTest(true).onSucceededTest(false);
+@Listeners({TextReport.class, ScreenShooter.class})
+public class DownloadTemplateTest {
 
     @BeforeClass
     public static void setup() {
@@ -46,13 +42,16 @@ public class DownloadTemplateTest {
         startMaximized = true;
 //        holdBrowserOpen=true;
 //        System.setProperty("webdriver.ie.driver", ".\\IEDriverServer.exe");
+
         InternetExplorerDriverManager.getInstance(DriverManagerType.IEXPLORER).arch32().setup();
+
 //        ChromeDriverManager.getInstance(DriverManagerType.CHROME).setup();
         open("/");
 
     }
     @Test
     public void DownloadTemplate() throws IOException {
+
         $("#txtUserName").setValue("absadm01");
         $("#txtPassword").setValue("qwerty").pressEnter();
 //        $("#btLogIn").click();
